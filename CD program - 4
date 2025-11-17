@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main() {
+    char ch;
+    int characters = 0, whitespaces = 0, newlines = 0;
+
+    printf("Enter text (Press ~ to stop):\n");
+
+    while ((ch = getchar()) != '~') {
+        if (ch == ' ' || ch == '\t') {
+            whitespaces++;
+            characters++;     // whitespace is also a character
+        }
+        else if (ch == '\n') {
+            newlines++;
+            characters++;     // newline is also a character
+        }
+        else {
+            characters++;     // normal characters
+        }
+    }
+
+    printf("\nTotal Characters: %d\n", characters);
+    printf("Total Whitespaces: %d\n", whitespaces);
+    printf("Total Newlines: %d\n", newlines);
+
+    return 0;
+}
