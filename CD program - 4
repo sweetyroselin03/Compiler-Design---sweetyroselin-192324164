@@ -1,0 +1,77 @@
+#include <stdio.h>
+
+int main() {
+    char s[3];   // Enough for 2-character operators + '\0'
+
+    printf("Enter any operator: ");
+    scanf("%s", s);
+
+    switch (s[0]) {
+        case '>':
+            if (s[1] == '=')
+                printf("Greater than or equal\n");
+            else
+                printf("Greater than\n");
+            break;
+
+        case '<':
+            if (s[1] == '=')
+                printf("Less than or equal\n");
+            else
+                printf("Less than\n");
+            break;
+
+        case '=':
+            if (s[1] == '=')
+                printf("Equal to\n");
+            else
+                printf("Assignment\n");
+            break;
+
+        case '!':
+            if (s[1] == '=')
+                printf("Not equal\n");
+            else
+                printf("Bit NOT\n");
+            break;
+
+        case '&':
+            if (s[1] == '&')
+                printf("Logical AND\n");
+            else
+                printf("Bitwise AND\n");
+            break;
+
+        case '|':
+            if (s[1] == '|')
+                printf("Logical OR\n");
+            else
+                printf("Bitwise OR\n");
+            break;
+
+        case '+':
+            printf("Addition\n");
+            break;
+
+        case '-':
+            printf("Subtraction\n");
+            break;
+
+        case '*':
+            printf("Multiplication\n");
+            break;
+
+        case '/':
+            printf("Division\n");
+            break;
+
+        case '%':
+            printf("Modulus\n");
+            break;
+
+        default:
+            printf("Not an operator\n");
+    }
+
+    return 0;
+}
