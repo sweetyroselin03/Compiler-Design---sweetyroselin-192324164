@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() 
+{
+    char input[100];
+    char prods[10][50];
+    char common[50];
+    char temp[50];
+    int n = 0, i, j, k;
+
+    printf("Enter productions for S (use | to separate):\n");
+    printf("S -> ");
+    gets(input);
+
+    // Split productions by '|'
+    j = 0; k = 0;
+    for(i = 0; i <= strlen(input); i++) {
+        if(input[i] == '|' || input[i] == '\0') {
+            prods[n][k] = '\0';
+            n++;
+            k = 0;
+        } else {
+            prods[n][k++] = input[i];
+        }
+    }
+
+    // Find common prefix among all productions
+    strcpy(common, prods[0]);
+
+    for(i = 1; i < n; i++) {
+        j = 0;
+        while(common[j] == prods[i][j] && common[j] != '\0')
+            j++;
+
+        common[j] = '\0';  // keep only common part
+    }
+
+    int len = strlen(common);
+
+    // Print factored result
+    printf("\nLeft Factored Grammar:\n");
+
+    if(len == 0) {
+        printf("No left factoring possible.\n");
+        return 0;
+    }
+
+    printf("S -> %sX\n", common);
+    printf("X -> ");
+
+    for(i = 0; i < n; i++) {
+        if(strlen(prods[i]) == len)
+            printf("ε");   // epsilon
+        else
+            printf("%s", prods[i] + len);
+
+        if(i < n - 1)
+            printf(" | ");
+    }
+
+    printf("\n");
+
+    return 0;
+}
