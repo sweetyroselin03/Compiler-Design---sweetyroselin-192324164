@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    int n, i;
+    char code[50][20];
+
+    printf("Enter the number of intermediate (3-address) codes: ");
+    scanf("%d", &n);
+    getchar(); // Clear newline
+
+    // Read TAC statements
+    for (i = 0; i < n; i++) {
+        printf("Enter 3-address code %d: ", i + 1);
+        fgets(code[i], 20, stdin);
+        code[i][strcspn(code[i], "\n")] = '\0'; // Remove newline
+    }
+
+    printf("\nThe generated target code is:\n");
+
+    // Generate assembly code
+    for (i = 0; i < n; i++) {
+        char lhs = code[i][0];   // a = b + c   → lhs = a
+        char op1 = code[i][2];   // b
+        char op  = code[i][3];   // +
+        char op2 = code[i][4];   // c
+
+        printf("\nmov %c, R%d", op1, i);
+
+        switch (op) {
+            case '+': printf("\nadd %c, R%d", op2, i); break;
+            case '-': printf("\nsub %c, R%d", op2, i); break;
+            case '*': printf("\nmul %c, R%d", op2, i); break;
+            case '/': printf("\ndiv %c, R%d", op2, i); break;
+        }
+
+        printf("\nmov R%d, %c\n", i, lhs);
+    }
+
+    return 0;
+}
