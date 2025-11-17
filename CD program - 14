@@ -1,0 +1,121 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+char input[20], stack[20];
+int ip = 0, sp = -1, len;
+
+// Function declaration
+void reduce();
+
+int main()
+{
+    printf("\n\t\tSHIFT REDUCE PARSER");
+    printf("\nGRAMMAR");
+    printf("\nE -> E+E");
+    printf("\nE -> E*E");
+    printf("\nE -> E/E");
+    printf("\nE -> a");
+    printf("\nE -> b");
+
+    printf("\n\nEnter the input string: ");
+    scanf("%s", input);
+
+    len = strlen(input);
+
+    printf("\n\nStack\t\tInput\t\tAction");
+    printf("\n-----------------------------------------------");
+
+    while (1)
+    {
+        // SHIFT
+        stack[++sp] = input[ip];
+        stack[sp + 1] = '\0';
+
+        printf("\n%s\t\t%s\t\tShift '%c'",
+               stack, input + ip + 1, input[ip]);
+
+        ip++;
+
+        reduce();
+
+        if (sp == 0 && stack[0] == 'E' && ip == len)
+        {
+            printf("\n%s\t\t$\t\tACCEPT\n", stack);
+            break;
+        }
+
+        if (ip == len && !(sp == 0 && stack[0] == 'E'))
+        {
+            printf("\n%s\t\t$\t\tREJECT\n", stack);
+            break;
+        }
+    }
+
+    return 0;
+}
+
+// REDUCTION FUNCTION
+void reduce()
+{
+    int done = 0;
+
+    while (!done)
+    {
+        done = 1;
+
+        // Reduce a → E
+        if (sp >= 0 && stack[sp] == 'a')
+        {
+            stack[sp] = 'E';
+            printf("\n%s\t\t%s\t\tReduce E → a", stack, input + ip);
+            done = 0;
+        }
+        // Reduce b → E
+        else if (sp >= 0 && stack[sp] == 'b')
+        {
+            stack[sp] = 'E';
+            printf("\n%s\t\t%s\t\tReduce E → b", stack, input + ip);
+            done = 0;
+        }
+        // Reduce E+E → E
+        else if (sp >= 2 &&
+                 stack[sp] == 'E' &&
+                 stack[sp - 1] == '+' &&
+                 stack[sp - 2] == 'E')
+        {
+            sp -= 2;
+            stack[sp] = 'E';
+            stack[sp + 1] = '\0';
+            printf("\n%s\t\t%s\t\tReduce E → E+E",
+                   stack, input + ip);
+            done = 0;
+        }
+        // Reduce E*E → E
+        else if (sp >= 2 &&
+                 stack[sp] == 'E' &&
+                 stack[sp - 1] == '*' &&
+                 stack[sp - 2] == 'E')
+        {
+            sp -= 2;
+            stack[sp] = 'E';
+            stack[sp + 1] = '\0';
+            printf("\n%s\t\t%s\t\tReduce E → E*E",
+                   stack, input + ip);
+            done = 0;
+        }
+        // Reduce E/E → E
+        else if (sp >= 2 &&
+                 stack[sp] == 'E' &&
+                 stack[sp - 1] == '/' &&
+                 stack[sp - 2] == 'E')
+        {
+            sp -= 2;
+            stack[sp] = 'E';
+            stack[sp + 1] = '\0';
+            printf("\n%s\t\t%s\t\tReduce E → E/E",
+                   stack, input + ip);
+            done = 0;
+        }
+    }
+}
