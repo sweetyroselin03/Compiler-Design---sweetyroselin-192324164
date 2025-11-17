@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char prod[20], A;       // A → Aα | β
+    char alpha[20], beta[20];
+    int i = 3, j = 0, k = 0;
+
+    printf("Enter production (Example: L->L,S|S): ");
+    scanf("%s", prod);
+
+    A = prod[0];    // Left-hand non-terminal
+
+    // Check Left Recursion (A -> A ...)
+    if (prod[3] == A) {
+        printf("\nThis production has LEFT RECURSION.\n");
+
+        // Extract α (after A)
+        i = 4;
+        while (prod[i] != '|') {
+            alpha[j++] = prod[i++];
+        }
+        alpha[j] = '\0';
+
+        // Extract β (after |)
+        i++; j = 0;
+        while (prod[i] != '\0') {
+            beta[k++] = prod[i++];
+        }
+        beta[k] = '\0';
+
+        // Print Result
+        printf("\nGrammar after eliminating left recursion:\n");
+        printf("%c -> %s%c'\n", A, beta, A);
+        printf("%c' -> %s%c' | E\n", A, alpha, A);
+    }
+    else {
+        printf("\nThis production has NO left recursion.\n");
+    }
+
+    return 0;
+}
