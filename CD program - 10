@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char prod[50], A, prefix[20], temp[20][20];
+    int i, j, k, n = 0;
+
+    printf("Enter Production (Example: S->iEtS|iEtSeS|a): ");
+    scanf("%s", prod);
+
+    A = prod[0];   // Left-hand non-terminal
+
+    // Extract RHS after "A->"
+    char *rhs = strchr(prod, '>') + 1;
+
+    // Split alternatives by '|'
+    i = 0; j = 0;
+    for (k = 0; ; k++) {
+        if (rhs[k] == '|' || rhs[k] == '\0') {
+            temp[n][j] = '\0';
+            n++;
+            j = 0;
+            if (rhs[k] == '\0')
+                break;
+        }
+        else {
+            temp[i][j++] = rhs[k];
+        }
+    }
+
+    // Find common prefix
+    int p = 0;
+    while (temp[0][p] == temp[1][p] && temp[1][p] == temp[2][p])
+        p++;
+
+    strncpy(prefix, temp[0], p);
+    prefix[p] = '\0';
+
+    // Output result
+    printf("\nLeft Factored Grammar:\n");
+    printf("%c -> %s%c'\n", A, prefix, A);
+
+    printf("%c' -> ", A);
+    for (i = 0; i < n; i++) {
+        printf("%s", &temp[i][p]);
+        if (i < n - 1)
+            printf(" | ");
+    }
+    printf("\n");
+
+    return 0;
+}
