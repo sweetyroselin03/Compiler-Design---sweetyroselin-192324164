@@ -1,0 +1,44 @@
+#include <stdio.h>
+
+int main() {
+    char ch;
+    int characters = 0, words = 0, lines = 0;
+    int inWord = 0;
+
+    printf("Enter text (end with ~):\n");
+
+    while ((ch = getchar()) != '~') {
+        
+        // Count characters except spaces and newline  
+        if (ch != ' ' && ch != '\n')
+            characters++;
+
+        // Count lines
+        if (ch == '\n')
+            lines++;
+
+        // Word detection
+        if (ch == ' ' || ch == '\n' || ch == '\t') {
+            if (inWord) {
+                words++;
+                inWord = 0;
+            }
+        } else {
+            inWord = 1;  // inside a word
+        }
+    }
+
+    // If last word didn’t end with space/newline
+    if (inWord)
+        words++;
+
+    // If user entered at least one line
+    if (characters > 0)
+        lines++;
+
+    printf("\nTotal number of words      : %d", words);
+    printf("\nTotal number of lines      : %d", lines);
+    printf("\nTotal number of characters : %d\n", characters);
+
+    return 0;
+}
